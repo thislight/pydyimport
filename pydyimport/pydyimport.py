@@ -32,10 +32,14 @@ class DynamicImport(object):
     def __init__(self,
                  current_file_rel_path,
                  *,
-                 global_cache=True,
+                 global_cache=False,
+                 cache=True,
                  env_injector=None,
                  inject_require=False):
         self.global_cache = global_cache
+        self.need_cache = cache
+        if cache:
+            self.package_cache = {}
         self.current_file = self.ROOTDIR / current_file_rel_path
         self.parent_dir = self.current_file.parent
         self.env_injector = env_injector
@@ -52,6 +56,8 @@ class DynamicImport(object):
         real_path = self.parent_dir / package_path
         if self.global_cache and (real_path in self.CACHE):
             return self.CACHE[real_path]
+        elif self.need_cache and (real_path in self.package_cache):
+            return self.package_cache[real_path]
         else:
             mod_content = self.load_module_content_from(real_path)
             mod = type('DynamicImportedModule', (DynamicImportedModule, ),
@@ -59,6 +65,8 @@ class DynamicImport(object):
             mod.__name__ = mod_content['__name__']
             if self.global_cache:
                 self.CACHE[real_path] = mod
+            if self.need_cache:
+                self.package_cache[real_path] = mod
             return mod
 
     def require_only(self, package_path, *field_names):
