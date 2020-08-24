@@ -90,12 +90,12 @@ class DynamicImport(object):
             new_global = {}
             if self.env_injector:
                 new_global.update(self.env_injector(path, text_b))
-            new_local = {
+            new_global.update({
                 '__name__': path.name.split('.')[0],
                 '__file__': str(path)
-            }
-            eval(binary, new_global, new_local)
-            return new_local
+            })
+            eval(binary, new_global)
+            return new_global
         else:
             raise ImportError(
                 "{} is not a file which can imported".format(path))
