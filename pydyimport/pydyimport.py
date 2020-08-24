@@ -29,10 +29,19 @@ class DynamicImport(object):
     ROOTDIR = Path.cwd()
     CACHE = {}
 
-    def __init__(self, current_file_rel_path, global_cache=True):
+    def __init__(self,
+                 current_file_rel_path,
+                 *,
+                 global_cache=True,
+                 env_injector=None,
+                 inject_require=False):
         self.global_cache = global_cache
         self.current_file = self.ROOTDIR / current_file_rel_path
         self.parent_dir = self.current_file.parent
+        self.env_injector = env_injector
+        if inject_require:
+            from .injector import RequireEnvInjector
+            self.env_injector = RequireEnvInjector(self.env_injector)
 
     def require(self, package_path):
         """
@@ -71,8 +80,7 @@ class DynamicImport(object):
             fields.append(getattr(mod, name))
         return tuple(fields)
 
-    @staticmethod
-    def load_module_content_from(path):
+    def load_module_content_from(self, path):
         if path.is_file():
             text_b = path.read_bytes()
             binary = compile(text_b,
@@ -80,6 +88,8 @@ class DynamicImport(object):
                              'exec',
                              optimize=True)
             new_global = {}
+            if self.env_injector:
+                new_global.update(self.env_injector(path, text_b))
             new_local = {
                 '__name__': path.name.split('.')[0],
                 '__file__': str(path)
