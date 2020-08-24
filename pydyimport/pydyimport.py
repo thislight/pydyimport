@@ -52,6 +52,25 @@ class DynamicImport(object):
                 self.CACHE[real_path] = mod
             return mod
 
+    def require_only(self, package_path, *field_names):
+        """
+        Load the module and only return fields which described in `field_names`. If one field doesn't exists, `getattr` will raise an error.
+
+        ````python
+        require_only = DynamicImport(__file__).require_only
+        spam1, spam2, foo = require_only('./module.py', 'spam1', 'spam2', 'foo')
+        ````
+
+        :param package_path: str
+        :param *field_names: List[str]
+        :return: Tuple[Any, ...]
+        """
+        mod = self.require(package_path)
+        fields = []
+        for name in field_names:
+            fields.append(getattr(mod, name))
+        return tuple(fields)
+
     @staticmethod
     def load_module_content_from(path):
         if path.is_file():
