@@ -8,7 +8,6 @@ print(f"{hello4=}")
 
 
 def hello1():
-    global mod3, hello4
     mod3.hello3()
     hello4()
     print("Hello 1")
