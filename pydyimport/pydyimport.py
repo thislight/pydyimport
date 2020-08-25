@@ -98,6 +98,9 @@ class DynamicImport(object):
                              'exec',
                              optimize=True)
             new_global = {}
+            if b"# inject_require" in text_b:
+                from .injector import RequireEnvInjector
+                env_injector = RequireEnvInjector(env_injector)
             if env_injector:
                 new_global.update(env_injector(path, text_b))
             new_global.update({
