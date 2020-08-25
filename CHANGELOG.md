@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.1-alpha.3
+* (`RequireEnvInjector`) `next_injector` set `None` as default.
+* update `README.md` for more usage.
+
 ## v0.0.1-alpha.2
 * (`DynamicImport.load_module_content_from`) automatically inject require* function when source file include `# inject_require`.
 * (`DynamicImport.load_module_content_from`) mark as `staticmethod`. 

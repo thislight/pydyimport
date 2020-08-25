@@ -5,11 +5,11 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pydyimport",
-    version="0.0.1-alpha.2",
+    version="0.0.1-alpha.3",
     author="thisLight",
     author_email="l1589002388@gmail.com",
     description=
-    "Dynamically import python file to aviod mess when you are using a different structure from python suggested.",
+    "Dynamically import python file to aviod mess when you are using a different directory structure from python suggested.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/thislight/pydyimport",
