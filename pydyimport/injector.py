@@ -2,7 +2,7 @@ from pathlib import Path
 
 
 class RequireEnvInjector(object):
-    def __init__(self, next_injector):
+    def __init__(self, next_injector=None):
         self.next_injector = next_injector
 
     def __call__(self, path_s, code):
