@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.1-alpha.2
+* (`DynamicImport.load_module_content_from`) automatically inject require* function when source file include `# inject_require`.
+* (`DynamicImport.load_module_content_from`) mark as `staticmethod`. 
+
 ## v0.0.1-alpha.1
 * (`DynamicImport`) new `env_injector` option to set up a environment injector in `DynamicImport`'s constructor, which accept a callable that recvice path as `str` and code as `str`, return a dict which contains fields set to global.
 * (`DynamicImport`) new `inject_require` option in `DynamicImport`'s constructor, set True to inject `require*` functions to imported modules.

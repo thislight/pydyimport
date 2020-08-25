@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pydyimport",
-    version="0.0.1-alpha.1",
+    version="0.0.1-alpha.2",
     author="thisLight",
     author_email="l1589002388@gmail.com",
     description=
