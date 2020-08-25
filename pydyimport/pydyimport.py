@@ -59,7 +59,8 @@ class DynamicImport(object):
         elif self.need_cache and (real_path in self.package_cache):
             return self.package_cache[real_path]
         else:
-            mod_content = self.load_module_content_from(real_path)
+            mod_content = self.load_module_content_from(
+                real_path, self.env_injector)
             mod = type('DynamicImportedModule', (DynamicImportedModule, ),
                        mod_content)
             mod.__name__ = mod_content['__name__']
@@ -88,7 +89,8 @@ class DynamicImport(object):
             fields.append(getattr(mod, name))
         return tuple(fields)
 
-    def load_module_content_from(self, path):
+    @staticmethod
+    def load_module_content_from(path, env_injector):
         if path.is_file():
             text_b = path.read_bytes()
             binary = compile(text_b,
@@ -96,8 +98,8 @@ class DynamicImport(object):
                              'exec',
                              optimize=True)
             new_global = {}
-            if self.env_injector:
-                new_global.update(self.env_injector(path, text_b))
+            if env_injector:
+                new_global.update(env_injector(path, text_b))
             new_global.update({
                 '__name__': path.name.split('.')[0],
                 '__file__': str(path)
